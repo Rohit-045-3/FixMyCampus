@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101a35" />
+  <title>Fix My Campus | Campus Issue Management</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <section class="login-screen" id="loginScreen" aria-labelledby="loginTitle">
+    <div class="login-card">
+      <div class="login-logo">F</div>
+      <p class="login-label">CAMPUS CARE PORTAL</p>
+      <h1 id="loginTitle">Fix My Campus</h1>
+      <p class="login-description">Sign in to report campus problems and track their progress.</p>
+      <form id="campusLoginForm">
+        <label for="campusEmail">Email address</label>
+        <input id="campusEmail" type="email" placeholder="Enter your email" autocomplete="username" required />
+        <label for="campusPassword">Password</label>
+        <div class="login-password-wrap">
+          <input id="campusPassword" type="password" placeholder="Enter password (min. 6 characters)" autocomplete="current-password" minlength="6" required />
+          <button type="button" id="campusTogglePassword" aria-label="Show password">Show</button>
+        </div>
+        <p id="campusLoginMessage" role="status" aria-live="polite"></p>
+        <button class="campus-login-button" type="submit">Login <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="login-footnote">Demo login · Enter any valid email and a password of at least 6 characters.</p>
+    </div>
+  </section>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" data-page="dashboard">
+        <span class="brand-mark">F</span>
+        <span><strong>Fix My Campus</strong><small>Campus care portal</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" data-page="dashboard"><span>▦</span> Overview</button>
+        <button class="nav-item" data-page="report"><span>＋</span> Report an issue <b class="nav-badge">New</b></button>
+        <button class="nav-item" data-page="complaints"><span>☷</span> Complaints</button>
+        <button class="nav-item" data-page="facilities"><span>⌂</span> Facilities</button>
+        <button class="nav-item" data-page="departments"><span>▤</span> Departments</button>
+        <button class="nav-item" data-page="people"><span>♙</span> Student & teacher support</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><div class="help-icon">✦</div><strong>Make campus better</strong><p>Every report helps the campus team take action.</p><button data-page="report" class="help-button">Report a problem <span>↗</span></button></div>
+        <div class="profile"><div class="avatar" id="profileAvatar">CU</div><div><strong id="profileName">Campus User</strong><small id="profileEmail">Frontend demo account</small></div><span class="online-dot"></span></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><b>/</b><strong id="pageCrumb">Overview</strong></div>
+        <div class="top-actions">
+          <label class="search-box"><span>⌕</span><input id="globalSearch" type="search" placeholder="Search complaints..." aria-label="Search complaints" /></label>
+          <button class="icon-button" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">◐</button>
+          <button class="top-report" data-page="report">＋ <span>New report</span></button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="page active" id="page-dashboard">
+          <div class="page-heading">
+            <div><div class="eyebrow">CAMPUS OPERATIONS</div><h1>Campus overview <span class="wave">✦</span></h1><p>Monitor campus issues and help make every space work better.</p></div>
+            <div class="heading-date" id="todayDate"></div>
+          </div>
+          <div class="welcome-banner">
+            <div class="welcome-copy"><span class="banner-pill">FIX MY CAMPUS · LIVE DEMO</span><h2>A better campus starts<br/>with one report.</h2><p>Notice something that needs attention? Tell us what happened and where.</p><button class="banner-button" data-page="report">Create a report <span>→</span></button></div>
+            <div class="banner-art" aria-hidden="true"><div class="art-sun"></div><div class="art-building building-back"></div><div class="art-building building-front"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="art-path"></div><div class="art-plant plant-one">♣</div><div class="art-plant plant-two">♣</div></div>
+          </div>
+          <div class="section-title-row"><div><h2>Issue summary</h2><p>Current reports across your campus</p></div><button class="text-button" data-page="complaints">View all complaints <span>→</span></button></div>
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon purple">☷</span><span class="stat-tag">All reports</span></div><div class="stat-value" id="totalStat">0</div><div class="stat-label">Total complaints</div><div class="stat-foot"><span class="mini-dot purple-dot"></span> Across all categories</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon orange">◷</span><span class="stat-tag warning">Needs attention</span></div><div class="stat-value" id="pendingStat">0</div><div class="stat-label">Pending issues</div><div class="stat-foot"><span class="mini-dot orange-dot"></span> Waiting for review</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon blue">↻</span><span class="stat-tag info">In progress</span></div><div class="stat-value" id="progressStat">0</div><div class="stat-label">Being worked on</div><div class="stat-foot"><span class="mini-dot blue-dot"></span> Under maintenance</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-icon green">✓</span><span class="stat-tag success">Completed</span></div><div class="stat-value" id="resolvedStat">0</div><div class="stat-label">Resolved issues</div><div class="stat-foot"><span class="mini-dot green-dot"></span> Marked as resolved</div></article>
+          </div>
+          <div class="dashboard-grid">
+            <article class="panel chart-panel"><div class="panel-heading"><div><h3>Complaint activity</h3><p>Reports by status</p></div><span class="panel-icon">⌁</span></div><div class="chart-wrap"><canvas id="statusChart" aria-label="Complaint status chart"></canvas><div class="chart-empty hidden" id="chartEmpty">Submit a report to start seeing activity.</div></div><div class="chart-legend"><span><i class="legend-dot dot-pending"></i>Pending</span><span><i class="legend-dot dot-progress"></i>In progress</span><span><i class="legend-dot dot-resolved"></i>Resolved</span></div></article>
+            <article class="panel category-panel"><div class="panel-heading"><div><h3>Popular categories</h3><p>Where help is needed</p></div><span class="panel-icon">⌘</span></div><div id="categoryBreakdown" class="category-breakdown"></div></article>
+          </div>
+          <div class="section-title-row"><div><h2>Recent complaints</h2><p>Latest campus reports</p></div><button class="text-button" data-page="complaints">Open complaint centre <span>→</span></button></div>
+          <div class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Complaint</th><th>Department</th><th>Reported by</th><th>Priority</th><th>Status</th></tr></thead><tbody id="recentTable"></tbody></table></div><div class="empty-state hidden" id="recentEmpty"><div class="empty-symbol">☷</div><strong>No reports yet</strong><p>Your latest reports will appear here.</p><button class="primary-button" data-page="report">Create first report</button></div></div>
+        </section>
+
+        <section class="page" id="page-report">
+          <div class="page-heading"><div><div class="eyebrow">REPORT CENTRE</div><h1>Report an issue</h1><p>Give the campus team enough detail to understand and act on the problem.</p></div><span class="secure-note">◇ Your report stays in this browser demo</span></div>
+          <div class="report-layout">
+            <form class="panel report-form" id="reportForm">
+              <div class="form-section-title"><span class="step-number">01</span><div><h3>Issue details</h3><p>What needs attention?</p></div></div>
+              <div class="form-grid">
+                <div class="field full"><label for="title">Issue title <span>*</span></label><input id="title" maxlength="100" required placeholder="e.g. Drinking water cooler is not working"/></div>
+                <div class="field"><label for="reporterType">I am a <span>*</span></label><select id="reporterType" required><option value="">Select your role</option><option>Student</option><option>Teacher</option><option>Non-teaching staff</option><option>Visitor</option></select></div>
+                <div class="field"><label for="reporterName">Name <span>*</span></label><input id="reporterName" maxlength="80" required placeholder="Your name"/></div>
+                <div class="field"><label for="departmentInput">Department <span>*</span></label><select id="departmentInput" required><option value="">Select department</option><option>CSE</option><option>EEE</option><option>ECE</option><option>Civil</option><option>Mechanical</option><option>Other department</option><option>Common campus</option></select></div>
+                <div class="field"><label for="issueType">Issue category <span>*</span></label><select id="issueType" required><option value="">Choose category</option></select></div>
+                <div class="field"><label for="facility">Facility / area</label><select id="facility"><option value="">Select facility</option></select></div>
+                <div class="field"><label for="priority">Priority <span>*</span></label><select id="priority" required><option>Normal</option><option>High</option><option>Urgent</option></select></div>
+                <div class="field"><label for="location">Exact location <span>*</span></label><input id="location" maxlength="150" required placeholder="Building, floor, room or area"/></div>
+                <div class="field full"><label for="description">Describe the problem <span>*</span></label><textarea id="description" maxlength="1500" rows="5" required placeholder="What happened? When did you notice it? What impact is it having?"></textarea><div class="field-hint">Do not include passwords or sensitive personal information.</div></div>
+                <div class="field full"><label for="attachment">Photo (optional)</label><input id="attachment" type="file" accept="image/*"/><div class="field-hint">This demo does not upload or permanently store attached files.</div></div>
+              </div>
+              <div class="form-actions"><button type="reset" class="secondary-button">Clear form</button><button type="submit" class="primary-button">Submit report <span>→</span></button></div>
+              <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+            </form>
+            <aside class="report-aside">
+              <div class="panel aside-card"><div class="aside-illustration">✦</div><h3>What happens next?</h3><ol class="steps-list"><li><span>1</span><div><strong>Report received</strong><p>Your report gets a unique reference ID.</p></div></li><li><span>2</span><div><strong>Reviewed by campus team</strong><p>The responsible team can review and prioritise it.</p></div></li><li><span>3</span><div><strong>Work gets underway</strong><p>Status can move to in progress and resolved.</p></div></li></ol></div>
+              <div class="tip-card"><span>◎</span><div><strong>Helpful tip</strong><p>Include the exact building, room number and a clear description to help the team locate the issue.</p></div></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page" id="page-complaints">
+          <div class="page-heading"><div><div class="eyebrow">ISSUE MANAGEMENT</div><h1>Complaint centre</h1><p>Search, filter and update the demo complaint records.</p></div><button class="primary-button" data-page="report">＋ New report</button></div>
+          <div class="filter-bar panel"><label class="filter-search">⌕ <input id="complaintSearch" type="search" placeholder="Search title, ID, location..."/></label><select id="filterDepartment" aria-label="Filter department"><option value="">All departments</option><option>CSE</option><option>EEE</option><option>ECE</option><option>Civil</option><option>Mechanical</option><option>Other department</option><option>Common campus</option></select><select id="filterStatus" aria-label="Filter status"><option value="">All statuses</option><option>Pending</option><option>In Progress</option><option>Resolved</option></select><select id="filterPriority" aria-label="Filter priority"><option value="">All priorities</option><option>Normal</option><option>High</option><option>Urgent</option></select></div>
+          <div class="complaint-results-heading"><span id="resultsCount">0 complaints</span><button class="text-button" id="clearFilters">Clear filters</button></div>
+          <div id="allComplaints" class="complaint-grid"></div>
+          <div class="empty-state panel hidden" id="complaintsEmpty"><div class="empty-symbol">⌕</div><strong>No matching complaints</strong><p>Try changing the filters or submit a new report.</p><button class="primary-button" data-page="report">Create report</button></div>
+        </section>
+
+        <section class="page" id="page-facilities">
+          <div class="page-heading"><div><div class="eyebrow">CAMPUS INFRASTRUCTURE</div><h1>Facilities directory</h1><p>Browse common campus facilities and the issues that can be reported.</p></div></div>
+          <div class="info-banner"><span>ⓘ</span><p>Choose any facility to start a report. These are example categories; customise them for your actual college.</p></div>
+          <div id="facilityGrid" class="facility-grid"></div>
+        </section>
+
+        <section class="page" id="page-departments">
+          <div class="page-heading"><div><div class="eyebrow">ACADEMIC UNITS</div><h1>Departments</h1><p>Department-specific facilities, labs and classroom issues.</p></div></div>
+          <div id="departmentGrid" class="department-grid"></div>
+        </section>
+
+        <section class="page" id="page-people">
+          <div class="page-heading"><div><div class="eyebrow">CAMPUS COMMUNITY</div><h1>Student & teacher support</h1><p>Separate issue types for students, teaching staff and campus employees.</p></div></div>
+          <div class="people-grid">
+            <article class="people-card"><div class="people-icon student-icon">♙</div><h3>Student concerns</h3><p>Report issues affecting learning, access to facilities or everyday campus life.</p><ul><li>Classroom and timetable issues</li><li>Library and study-space access</li><li>Hostel, transport and canteen concerns</li><li>Accessibility and campus safety</li><li>IT, Wi-Fi and student service issues</li></ul><button class="primary-button" data-role="Student">Report student concern →</button></article>
+            <article class="people-card"><div class="people-icon teacher-icon">▣</div><h3>Teacher concerns</h3><p>Report issues affecting teaching, practicals and academic operations.</p><ul><li>Teaching equipment and projectors</li><li>Lab resources and maintenance</li><li>Classroom scheduling conflicts</li><li>Faculty workspace and IT issues</li><li>Academic facility requests</li></ul><button class="primary-button" data-role="Teacher">Report teacher concern →</button></article>
+            <article class="people-card"><div class="people-icon staff-icon">⚙</div><h3>Staff & service concerns</h3><p>Raise maintenance and operational issues that need campus coordination.</p><ul><li>Cleaning and waste collection</li><li>Electrical and plumbing repairs</li><li>Security and access equipment</li><li>Furniture and building repairs</li><li>Grounds and transport facilities</li></ul><button class="primary-button" data-role="Non-teaching staff">Report staff concern →</button></article>
+          </div>
+          <div class="privacy-note"><strong>Privacy note</strong><p>This prototype is not a secure confidential reporting channel. Do not submit allegations, medical details or sensitive personal information. A real deployment needs access controls and a protected backend.</p></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
